@@ -9,7 +9,7 @@ import LoginImage from "../components/LoginImage";
 function Login() {
   return (
     <>
-      <div className="bg-black text-white h-screen w-full">
+      {/* <div className="bg-black text-white h-screen w-full">
         <div className="login-container h-full flex">
           <LoginImage />
 
@@ -19,7 +19,13 @@ function Login() {
             <LoginFooter />
           </div>
         </div>
-      </div>
+      </div> */}
+
+    <LoginForm/>
+
+
+
+
     </>
   );
 }

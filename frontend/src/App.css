@@ -1,0 +1,21 @@
+/* *{
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+} */
+
+
+:root{
+  --primary-color: rgb(50, 48, 47);
+  --secondary-color: rgb(245, 244, 244);
+}
+
+.login-image-container{
+
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('./assets/login_image.jpg');
+}

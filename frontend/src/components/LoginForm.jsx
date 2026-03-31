@@ -5,9 +5,19 @@ import { FaKey } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { Link } from "react-router";
+import Input from "./Input";
 
 function LoginForm() {
   const [show, setShow] = useState(false);
+
+  const[userDetails, setUserDetails] = useState({
+    email:"",
+    password:""
+  })
+
+  const handelChange = (e)=>{
+    setUserDetails((val)=> ({...val , [e.target.name]:e.target.value}))
+  }
 
   const handelSeeButton = () => {
     setShow((show) => !show);
@@ -19,17 +29,25 @@ function LoginForm() {
         <h1 className="text-white text-2xl font-semibold">Welcome Back</h1>
 
         <form className="mt-5 flex flex-col w-full gap-6">
-          <input
-            type="email"
-            placeholder="Email"
-            className="border  border-(--primary-color) rounded-2xl p-3 w-full hover:border-white transition-all duration-150"
+          
+          <Input
+            type={"email"}
+            placeholder={"Email"}
+            value={userDetails.email}
+            name={"email"}
+            handelChange={handelChange}
           />
 
           <div className="relative">
-            <input
-              type={show ? "text" : "password"}
-              placeholder="Password"
-              className="border   border-(--primary-color) rounded-2xl p-3 w-full hover:border-white transition-all duration-150"
+           
+
+            <Input
+              type={"password"}
+              placeholder={"Password"}
+              value={userDetails.password}
+              name={"password"}
+              handelChange={handelChange}
+            
             />
 
             <div

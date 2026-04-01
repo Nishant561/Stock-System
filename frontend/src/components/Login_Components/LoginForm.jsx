@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import "../App.css";
-import "../index.css";
+import "../../App.css";
+
+import "../../index.css"
 import { FaKey } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";

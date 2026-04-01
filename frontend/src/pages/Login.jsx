@@ -1,10 +1,11 @@
 import React from "react";
 import "../App.css";
-import "../index.css";
 
-import LoginForm from "../components/LoginForm";
-import LoginFooter from "../components/LoginFooter";
-import LoginImage from "../components/LoginImage";
+
+import "../index.css"
+
+import LoginForm from "../components/Login_Components/LoginForm";
+
 
 function Login() {
   return (

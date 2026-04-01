@@ -10,7 +10,7 @@ function Input({type="text", placeholder, value, name, handelChange }) {
                 value={value}
                 name={name}
                 onChange={handelChange}
-                className="border  border-(--primary-color) focus:bg-transparent rounded-2xl p-3 w-full hover:border-white transition-all duration-150"
+                className="border  border-(--primary-color)  rounded-2xl p-3 w-full hover:border-white transition-all duration-150"
             
             />
 

@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import "../App.css";
-import "../index.css";
+import "../../App.css";
+
+import "../../index.css";
 import { FaKey } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { Link } from "react-router";
 import Input from "./Input";
+import zxcvbn from "zxcvbn";
+
+const COLORS = ["", "#E24B4A", "#EF9F27", "#1D9E75", "#639922"];
+const WIDTHS = ["0%", "25%", "50%", "75%", "100%"];
 
 function SignupForm() {
   const [show, setShow] = useState(false);
+  const [result, setResult] = useState(null);
+
   const [strongPassword, setStrongPassword] = useState(false);
   const [userDetails, setUserDetails] = useState({
     username: "",
@@ -18,12 +25,13 @@ function SignupForm() {
 
   const handelChange = (e) => {
     const { name, value } = e.target;
-
     let strongPassRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{10,}$/;
 
     if (name === "password") {
       setStrongPassword(strongPassRegex.test(value));
+      setResult(zxcvbn(value));
+      
     }
 
     setUserDetails((prev) => ({ ...prev, [name]: value }));
@@ -33,17 +41,20 @@ function SignupForm() {
     setShow((show) => !show);
   };
 
-  const handelFormSubmit = (e)=>{
-    e.preventDefault()
-    console.log(userDetails)
-  }
+  const handelFormSubmit = (e) => {
+    e.preventDefault();
+    console.log(userDetails);
+  };
 
   return (
     <>
-      <div className="sign-in-container bg-(--primary-color)/25 rounded-2xl border border-(--primary-color)  w-4/6 flex flex-col items-center  text-(--secondary-color) px-6 py-4">
+      <div className="sign-in-container bg-(--primary-color)/25 rounded-2xl border border-(--primary-color)  w-4/6 flex flex-col  items-center  text-(--secondary-color) px-6 py-4">
         <h1 className="text-white text-2xl font-semibold">Sign up</h1>
 
-        <form onSubmit={handelFormSubmit} className="mt-5 flex flex-col w-full gap-6">
+        <form
+          onSubmit={handelFormSubmit}
+          className="mt-5 flex flex-col w-full gap-6 focus:bg-transparent"
+        >
           <Input
             type={"text"}
             placeholder={"Preferred Name (Optional)"}
@@ -85,16 +96,26 @@ function SignupForm() {
             </div>
           </div>
 
-              
-                
-
-
           <div className="-mt-3">
-            {/* <div className="w-full h-1.5 rounded-full bg-red-400">
-
-
-            </div> */}
-            <p className="font-semibold">Minimum 10 characters.</p>
+            <div
+              className=" h-1.5 rounded-full"
+              style={{
+                width: userDetails.password
+                  ? result?.score == 0
+                    ? "25%"
+                    : WIDTHS[result?.score]
+                  : "0%",
+                background:result?.score<=0 ? "#E24B4A": COLORS[result?.score],
+              }}
+            ></div>
+            {userDetails.password === "" ? (
+              <p className="font-semibold text-xs ">Minimum 10 characters.</p>
+            ) : (
+              <p className="font-semibold text-xs mt-1.5">
+                Add uppercase, lowercase, symbols and numbers for strong
+                password.
+              </p>
+            )}
             <p className="text-xs text-justify mt-3">
               By signing up, you agree to Nishant's Terms of Use and Privacy
               Policy. By providing your email, you consent to receive
@@ -108,10 +129,14 @@ function SignupForm() {
             <button
               type="submit"
               disabled={!strongPassword}
-              className={`${strongPassword ? "bg-white" : "bg-(--primary-color)"} px-5 py-2.5 rounded-3xl text-[18px] text-gray-400 w-44  cursor-pointer transition-all duration-150 relative group`}
+              className={`${strongPassword ? "bg-white text-(--primary-color)" : "bg-(--primary-color) text-gray-400"} px-5 py-2.5 rounded-3xl text-[18px]  w-44  cursor-pointer transition-all duration-150 relative group`}
             >
               Next
-              {/* <div className=" absolute h-full w-full bg-(--primary-color) opacity-0  top-0 left-0 rounded-3xl  group-hover:opacity-10 pointer-events-none  "></div> */}
+              {strongPassword ? (
+                <div className=" absolute h-full w-full bg-(--primary-color) opacity-0  top-0 left-0 rounded-3xl  group-hover:opacity-10 pointer-events-none  "></div>
+              ) : (
+                <div className="pointer-events-none"></div>
+              )}
             </button>
 
             <p className="text-[14px]">

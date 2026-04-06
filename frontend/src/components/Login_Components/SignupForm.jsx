@@ -8,6 +8,9 @@ import { FaEye } from "react-icons/fa";
 import { Link } from "react-router";
 import Input from "./Input";
 import zxcvbn from "zxcvbn";
+import {createUser} from "../../api/userService"
+import { toast } from "react-toastify";
+
 
 const COLORS = ["", "#E24B4A", "#EF9F27", "#1D9E75", "#639922"];
 const WIDTHS = ["0%", "25%", "50%", "75%", "100%"];
@@ -15,10 +18,12 @@ const WIDTHS = ["0%", "25%", "50%", "75%", "100%"];
 function SignupForm() {
   const [show, setShow] = useState(false);
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  
 
   const [strongPassword, setStrongPassword] = useState(false);
   const [userDetails, setUserDetails] = useState({
-    username: "",
+    userName: "",
     password: "",
     email: "",
   });
@@ -41,10 +46,34 @@ function SignupForm() {
     setShow((show) => !show);
   };
 
+ 
+
   const handelFormSubmit = (e) => {
     e.preventDefault();
-    console.log(userDetails);
+    setLoading(true)
+    createUser(userDetails)
+    .then((res)=> {
+      toast.dismiss()
+      toast.success(res?.data?.message,{
+        toastId:"success-msg"
+      });
+
+    })
+    .catch((err)=>{
+      toast.dismiss()
+      toast.error( err.response?.data.message,{
+        toastId:"failure-msg"
+      })
+  
+    })
+    .finally(()=>{
+      setLoading(false)
+    })
+
+    
   };
+  
+ 
 
   return (
     <>
@@ -58,8 +87,8 @@ function SignupForm() {
           <Input
             type={"text"}
             placeholder={"Preferred Name (Optional)"}
-            value={userDetails.username}
-            name={"username"}
+            value={userDetails.userName}
+            name={"userName"}
             handelChange={handelChange}
           />
 
@@ -128,10 +157,13 @@ function SignupForm() {
           <div className="flex flex-col w-full items-center gap-5">
             <button
               type="submit"
-              disabled={!strongPassword}
+              disabled={!strongPassword && !loading}
               className={`${strongPassword ? "bg-white text-(--primary-color)" : "bg-(--primary-color) text-gray-400"} px-5 py-2.5 rounded-3xl text-[18px]  w-44  cursor-pointer transition-all duration-150 relative group`}
             >
-              Next
+              {
+                loading?   "....." : "Next" 
+              }
+              
               {strongPassword ? (
                 <div className=" absolute h-full w-full bg-(--primary-color) opacity-0  top-0 left-0 rounded-3xl  group-hover:opacity-10 pointer-events-none  "></div>
               ) : (

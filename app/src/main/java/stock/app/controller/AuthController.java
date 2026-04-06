@@ -1,25 +1,39 @@
 package stock.app.controller;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import stock.app.dto.UserDTO;
 import stock.app.models.User;
 import stock.app.repository.UserRepo;
+import stock.app.response.EndUserResponse;
+import stock.app.service.AuthService;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "*")
 public class AuthController {
+
+
+    private final AuthService authService;
+
+    @Autowired
+    public AuthController (AuthService authService){
+        this.authService = authService;
+    }
 
     @Autowired
     private UserRepo userRepo;
 
     @PostMapping("/signup")
-    public String createNewAccount(@RequestBody User user){
-       User userOne = userRepo.save(user);
-       return "User Created Successfully!";
+    public ResponseEntity<?> createNewAccount(@Valid @RequestBody UserDTO userDTO){
+        EndUserResponse res = authService.createNewUser(userDTO);
+
+       return ResponseEntity.status(res.getStatusCode()).body(res);
+
     }
 
 

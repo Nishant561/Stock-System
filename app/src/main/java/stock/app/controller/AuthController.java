@@ -36,6 +36,13 @@ public class AuthController {
 
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDTO){
+        EndUserResponse res = authService.login(userDTO);
+
+        return ResponseEntity.status(res.getStatusCode()).body(res);
+    }
+
 
 
 }

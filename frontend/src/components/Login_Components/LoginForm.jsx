@@ -5,11 +5,16 @@ import "../../index.css"
 import { FaKey } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Input from "./Input";
+import { toast } from "react-toastify";
+import {loginUser} from "../../api/userService"
+import Dashboard from "../../pages/Dashboard";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
 function LoginForm() {
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const[userDetails, setUserDetails] = useState({
     email:"",
@@ -24,12 +29,28 @@ function LoginForm() {
     setShow((show) => !show);
   };
 
+  const handelFormSubmit = (e)=>{
+    e.preventDefault();
+    loginUser(userDetails).then((res)=> {
+        toast.dismiss();
+          toast.success(res?.data?.message,{
+            toastId:"success-msg"
+          });
+          navigate("/dashboard");
+      }).catch((err)=>{
+        toast.dismiss();
+        toast.error(err.response.data.message, {
+          toastId:"error-msg"
+        })
+      })
+  }
+
   return (
     <>
       <div className="sign-in-container bg-(--primary-color)/25 rounded-2xl border border-(--primary-color)  w-4/6 flex flex-col items-center  text-(--secondary-color) px-6 py-4">
         <h1 className="text-white text-2xl font-semibold">Welcome Back</h1>
 
-        <form className="mt-5 flex flex-col w-full gap-6">
+        <form onSubmit={handelFormSubmit} className="mt-5 flex flex-col w-full gap-6">
           
           <Input
             type={"email"}
@@ -43,7 +64,7 @@ function LoginForm() {
            
 
             <Input
-              type={"password"}
+              type={show?"text" :"password"}
               placeholder={"Password"}
               value={userDetails.password}
               name={"password"}

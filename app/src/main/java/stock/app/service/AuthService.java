@@ -65,6 +65,33 @@ public class AuthService {
     }
 
 
+    public EndUserResponse login(UserDTO userDTO){
+     Optional<User> user = userRepo.findByEmail(userDTO.getEmail());
+
+     if(user.isEmpty()){
+         return new EndUserResponse(
+                 "User Dosen't Exist!",
+                 HttpStatus.BAD_REQUEST.value(),
+                 LocalDateTime.now()
+         );
+
+     }
+
+     if(!user.get().getPassword().equals( userDTO.getPassword())){
+         return new EndUserResponse(
+                 "Incorrect Password!",
+                 HttpStatus.BAD_REQUEST.value(),
+                 LocalDateTime.now()
+         );
+     }
+
+     return new EndUserResponse(
+             "LoggedIn Successfully!",
+             HttpStatus.OK.value(),
+             LocalDateTime.now()
+     );
+
+    }
 
 
 

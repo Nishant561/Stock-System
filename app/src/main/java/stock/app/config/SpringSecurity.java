@@ -26,9 +26,5 @@ public class SpringSecurity {
                 return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
 }
